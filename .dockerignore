@@ -1,0 +1,9 @@
+node_modules
+.env
+.git
+*.log
+dist
+script/dist
+script/node_modules
+logbook/*/proof.txt
+.DS_Store

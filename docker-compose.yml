@@ -1,0 +1,21 @@
+services:
+  logbook:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: logbook
+    env_file:
+      - .env
+    volumes:
+      - logbook-data:/app/logbooks
+    working_dir: /app/logbook-app
+    command: npm run start
+    tty: true
+    stdin_open: true
+    networks:
+      - logbook-network
+networks:
+  logbook-network:
+    driver: bridge
+volumes:
+  logbook-data: {}
