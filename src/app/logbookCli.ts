@@ -234,6 +234,7 @@ export class LogbookCli {
     } else if (!exists && count > 0) {
       console.log(`\n🔥  Logbook exists on-chain but not locally`);
       console.log(`Use "Reconstruct from contract" to restore it`);
+      await this.showMainMenu();
       return;
     } else {
       console.log(`\n✓ Logbook selected: ${name}`);
