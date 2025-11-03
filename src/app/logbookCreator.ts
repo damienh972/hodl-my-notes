@@ -40,22 +40,28 @@ export class LogbookCreator {
   }
 
   private async promptEntryName(): Promise<string> {
-    return input({
-      message: "📝 Entry name:",
+    const currentCount = this.chainManager.getEntries().length;
+    const prefix = String(currentCount + 1).padStart(4, '0');
+
+    const userInput = await input({
+      message: `📝 Entry name (will be prefixed with ${prefix}_):`,
       validate: (value: string) => {
         if (!value.trim()) return "Name cannot be empty";
         if (!/^[a-zA-Z0-9_-]+$/.test(value)) {
           return "Name must contain only letters, numbers, _ or -";
         }
-
-        const entryDir = path.join(this.chainManager.getLogbookDir(), value);
-        if (fs.existsSync(entryDir)) {
-          return "Entry with this name already exists";
-        }
-
         return true;
       },
     });
+
+    const finalName = `${prefix}_${userInput}`;
+    const entryDir = path.join(this.chainManager.getLogbookDir(), finalName);
+
+    if (fs.existsSync(entryDir)) {
+      throw new Error("Entry with this name already exists");
+    }
+
+    return finalName;
   }
 
   private async promptContent(): Promise<string> {
